@@ -1,0 +1,37 @@
+- name: Add migrate package repo
+  shell: curl -s https://packagecloud.io/install/repositories/golang-migrate/migrate/script.deb.sh | bash
+  args:
+    executable: /bin/bash
+
+- name: Update apt cache after adding migrate repo
+  apt:
+    update_cache: yes
+
+- name: Install migrate tool
+  apt:
+    name: migrate
+    state: present
+
+- name: Download migrate binary
+  get_url:
+    url: https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.linux-amd64.tar.gz
+    dest: /tmp/migrate.tar.gz
+    mode: '0755'
+
+- name: Extract migrate binary
+  unarchive:
+    src: /tmp/migrate.tar.gz
+    dest: /usr/local/bin/
+    remote_src: yes
+    creates: /usr/local/bin/migrate
+
+- name: Rename migrate binary
+  command: mv /usr/local/bin/migrate.linux-amd64 /usr/local/bin/migrate
+  args:
+    creates: /usr/local/bin/migrate
+
+- name: Ensure migrate binary is executable
+  file:
+    path: /usr/local/bin/migrate
+    mode: '0755'
+    state: file

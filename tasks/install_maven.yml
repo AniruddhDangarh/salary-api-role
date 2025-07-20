@@ -1,0 +1,7 @@
+---
+# salary-api-role/tasks/install_maven.yml
+- name: Install Maven
+  apt:
+    name: "{{ maven_package }}"
+    state: present
+

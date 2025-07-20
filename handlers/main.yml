@@ -1,0 +1,7 @@
+---
+# handlers file for salary-api-role
+- name: Restart Redis
+  systemd:
+    name: redis-server
+    state: restarted
+

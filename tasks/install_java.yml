@@ -1,0 +1,8 @@
+---
+# salary-api-role/tasks/install_java.yml
+- name: Install Java
+  apt:
+    name: "{{ java_package }}"
+    state: present
+    update_cache: yes
+

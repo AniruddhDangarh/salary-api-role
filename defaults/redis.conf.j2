@@ -1,0 +1,19 @@
+# redis.conf - managed by Ansible
+
+bind 127.0.0.1 {{ ansible_host }}
+protected-mode no
+port 6379
+tcp-backlog 511
+timeout 0
+tcp-keepalive 300
+
+daemonize no
+supervised systemd
+pidfile /var/run/redis/redis-server.pid
+loglevel notice
+logfile /var/log/redis/redis-server.log
+dir /var/lib/redis
+
+# Authentication
+requirepass {{ redis_password }}
+

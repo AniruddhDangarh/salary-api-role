@@ -1,0 +1,17 @@
+- name: Ensure app directory exists
+  file:
+    path: "{{ app_dir }}"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: '0755'
+
+- name: Clone Salary API repository
+  git:
+    repo: "{{ app_repo }}"
+    dest: "{{ app_dir }}"
+    version: "{{ app_branch }}"
+    update: yes
+  become: yes
+  become_user: "{{ app_user }}"
+

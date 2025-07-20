@@ -1,0 +1,22 @@
+---
+# salary-api-role/defaults/main.yml
+java_package: openjdk-17-jre-headless
+maven_package: maven
+make_package: make
+jq_package: jq
+scylla_private_ip: "172.31.3.177"
+scylla_user: scylladb
+scylla_password: password
+scylla_keyspace: employee_DB
+scylla_table: employee_salary
+redis_password: 'SuperSecureRedisPass123'
+app_user: ubuntu
+app_repo: https://github.com/Cloud-NInja-snaatak/salary-api.git
+app_branch: main
+app_dir: /opt/salary-api
+scylla_user: scylladb
+scylla_pass: password
+scylla_app_user: scylladb
+scylla_app_password: password
+redis_bind_ip: "{{ ansible_host }}"
+

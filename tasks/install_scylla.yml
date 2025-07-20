@@ -1,0 +1,31 @@
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Create keyrings directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Add ScyllaDB GPG key
+  shell: |
+    gpg --homedir /tmp --no-default-keyring --keyring /etc/apt/keyrings/scylladb.gpg \
+    --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys a43e06657bac99e3
+  args:
+    creates: /etc/apt/keyrings/scylladb.gpg
+
+- name: Add Scylla APT source list
+  get_url:
+    url: http://downloads.scylladb.com/deb/debian/scylla-6.2.list
+    dest: /etc/apt/sources.list.d/scylla.list
+
+- name: Update apt after adding Scylla repo
+  apt:
+    update_cache: yes
+
+- name: Install Scylla
+  apt:
+    name: scylla
+    state: present
+

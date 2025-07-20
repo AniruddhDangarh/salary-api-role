@@ -1,0 +1,14 @@
+- name: Run database migrations
+  command: make migrate
+  args:
+    chdir: "{{ app_dir }}"
+  become: yes
+  become_user: "{{ app_user }}"
+
+- name: Start the Salary API
+  command: make run
+  args:
+    chdir: "{{ app_dir }}"
+  become: yes
+  become_user: "{{ app_user }}"
+

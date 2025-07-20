@@ -1,0 +1,47 @@
+- name: Run IO setup script
+  command: /opt/scylladb/scripts/scylla_io_setup
+  register: io_setup_result
+  changed_when: "'Already' not in io_setup_result.stdout"
+
+- name: Start scylla-server
+  systemd:
+    name: scylla-server
+    enabled: yes
+    state: started
+
+- name: Wait for Scylla to come online
+  wait_for:
+    host: "{{ scylla_private_ip }}"
+    port: 9042
+    delay: 10
+    timeout: 60
+
+- name: Create user in Scylla
+  shell: >
+    cqlsh {{ scylla_private_ip }} -u cassandra -p cassandra
+    -e "CREATE USER {{ scylla_user }} WITH PASSWORD '{{ scylla_password }}' NOSUPERUSER;"
+  ignore_errors: yes
+
+- name: Grant user permissions
+  shell: >
+    cqlsh {{ scylla_private_ip }} -u cassandra -p cassandra
+    -e "GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{ scylla_user }};"
+  ignore_errors: yes
+
+- name: Create keyspace
+  shell: >
+    cqlsh {{ scylla_private_ip }} -u cassandra -p cassandra
+    -e "CREATE KEYSPACE IF NOT EXISTS {{ scylla_keyspace }} WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};"
+
+- name: Create employee_salary table
+  shell: >
+    cqlsh {{ scylla_private_ip }} -u cassandra -p cassandra -k {{ scylla_keyspace }}
+    -e "CREATE TABLE IF NOT EXISTS {{ scylla_table }} (
+           id text,
+           process_date text,
+           name text,
+           salary float,
+           status text,
+           PRIMARY KEY (id, process_date)
+         ) WITH CLUSTERING ORDER BY (process_date DESC);"
+

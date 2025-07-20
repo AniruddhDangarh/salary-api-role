@@ -1,0 +1,20 @@
+#cluster_name: 'scylla-cluster'
+num_tokens: 256
+seeds: "{{ ansible_host }}"
+
+authenticator: PasswordAuthenticator
+authorizer: CassandraAuthorizer
+
+listen_address: "{{ ansible_host }}"
+broadcast_address: "{{ ansible_host }}"
+
+native_transport_port: 9042
+native_shard_aware_transport_port: 19042
+
+
+
+rpc_address: "{{ ansible_host }}"
+broadcast_rpc_address: "{{ ansible_host }}"
+
+endpoint_snitch: GossipingPropertyFileSnitch
+
