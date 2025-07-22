@@ -14,24 +14,7 @@
 - name: Install Migrate
   include_tasks: install_migrate.yml
 
-- name: Install ScyllaDB
-  include_tasks: install_scylla.yml
-
-- name: Configure ScyllaDB
-  include_tasks: configure_scylla.yml
-
-- name: Post-install Scylla setup
-  include_tasks: scylla_post_install.yml
-
-- import_tasks: install_make.yml
-
-- import_tasks: install_migrate.yml
-
-- import_tasks: install_jq.yml
-
 - import_tasks: clone_app.yml
 
 - import_tasks: run_api.yml
 
-- name: Run Scylla IO setup
-  command: /opt/scylladb/scripts/scylla_io_setup

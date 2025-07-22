@@ -1,12 +1,25 @@
-- name: Run database migrations
-  command: make migrate
-  args:
+- name: Render migration.json with DB config
+  template:
+    src: migration.json.j2
+    dest: "{{ app_dir }}/migration.json"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: '0644'
+
+      #- name: Run database migrations
+      #command: make run-migrations
+      #args:
+      #chdir: "{{ app_dir }}"
+      #become: yes
+      #become_user: "{{ app_user }}"
+
+- name: Run migrations
+  make:
     chdir: "{{ app_dir }}"
-  become: yes
-  become_user: "{{ app_user }}"
+    target: run-migrations
 
 - name: Start the Salary API
-  command: make run
+  command: make build
   args:
     chdir: "{{ app_dir }}"
   become: yes
