@@ -1,3 +1,19 @@
+- name: src/main application
+  template:
+    src: application.yml.j2
+    dest: "{{ app_dir }}/src/main/resources/application.yml"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: '0644'
+
+- name: src/test application
+  template:
+    src: applicationtest.yml.j2
+    dest: "{{ app_dir }}/src/test/resources/application.yml"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: '0644'
+
 - name: Render migration.json with DB config
   template:
     src: migration.json.j2
@@ -14,9 +30,9 @@
       #become_user: "{{ app_user }}"
 
 - name: Run migrations
-  make:
-    chdir: "{{ app_dir }}"
-    target: run-migrations
+  command: /usr/bin/gmake run-migrations
+  args:
+    chdir: /home/ubuntu/salary-api
 
 - name: Start the Salary API
   command: make build
@@ -25,3 +41,9 @@
   become: yes
   become_user: "{{ app_user }}"
 
+- name: java release
+  command: java -jar target/salary-0.1.0-RELEASE.jar
+  args:
+    chdir: "{{ app_dir }}"
+  become: yes
+  become_user: "{{ app_user }}"

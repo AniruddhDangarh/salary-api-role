@@ -9,5 +9,5 @@ app_repo: https://github.com/OT-MICROSERVICES/salary-api.git
 app_branch: main
 app_dir: /home/ubuntu/salary-api
 redis_bind_ip: "{{ ansible_host }}"
-scylla_db_host: 172.31.3.177
+scylla_db_host: 172.31.6.24
 
